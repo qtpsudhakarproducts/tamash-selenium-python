@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tamash-selenium"
+version = "0.0.1"
+description = "Placeholder — tamash-selenium is a Java / Maven package, not a Python one."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Sudhakar Kakunuri", email = "sudhakar@qtpsudhakar.com" }]
+keywords = ["selenium", "self-healing", "test-automation", "placeholder"]
+classifiers = [
+  "Development Status :: 7 - Inactive",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Topic :: Software Development :: Testing",
+]
+
+[project.urls]
+Homepage = "https://qtpsudhakarproducts.github.io/tamash-selenium/"
+Documentation = "https://qtpsudhakarproducts.github.io/tamash-selenium/guide.html"
+Source = "https://github.com/qtpsudhakarproducts/tamash-selenium"
+"Maven Central" = "https://central.sonatype.com/artifact/com.vibetestq.qtpsudhakar/tamash-selenium"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tamash_selenium"]
