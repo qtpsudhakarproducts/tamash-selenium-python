@@ -1,5 +1,6 @@
 # tamash-selenium (Python)
 
+[![CI](https://github.com/qtpsudhakarproducts/tamash-selenium-python/actions/workflows/ci.yml/badge.svg)](https://github.com/qtpsudhakarproducts/tamash-selenium-python/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 Plug-and-play self-healing for **Selenium + Python**. Wrap your `WebDriver` once and every
@@ -31,15 +32,22 @@ failure.
 
 ## Step 1: Install
 
+Not on PyPI yet — install from GitHub, pinned to a release tag:
+
 ```sh
-pip install tamash-selenium
+pip install "tamash-selenium @ git+https://github.com/qtpsudhakarproducts/tamash-selenium-python@v0.1.0"
 ```
 
 Pulls in Selenium 4 (which provisions the browser drivers itself since 4.6). Requires **Python 3.9+**.
 
-Optional AI-provider extras: `pip install 'tamash-selenium[anthropic]'` /
-`'tamash-selenium[claude-subscription]'` / `'tamash-selenium[copilot-subscription]'`. The
-`openai` / `gemini` / `ollama` providers need nothing extra.
+Optional AI-provider extras (append to the URL above, e.g. `...@v0.1.0#egg=tamash-selenium[anthropic]`,
+or `pip install anthropic` separately): `anthropic` / `claude-subscription` need the `anthropic`
+package; `copilot-subscription` needs `github-copilot-sdk` (Python 3.11+). The `openai` / `gemini`
+/ `ollama` providers need nothing extra.
+
+**Worked examples** — every test style and every healing scenario, with locators broken on
+purpose — live in
+[`tamash-selenium-python-sample`](https://github.com/qtpsudhakarproducts/tamash-selenium-python-sample).
 
 ## Step 2: Wrap the driver
 
