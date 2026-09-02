@@ -33,10 +33,16 @@ def _warn(reason: str, not_installed: bool) -> None:
           "`copilot` CLI, or for CI set GITHUB_TOKEN, or use an API-key provider instead.")
 
 
+def _github_token() -> Optional[str]:
+    # A PAT with Copilot access (CI). Falls back to the `copilot` CLI's own login when unset.
+    return env.get("COPILOT_GITHUB_TOKEN") or env.get("GITHUB_TOKEN") or None
+
+
 async def _send_async(model: str, system_prompt: str, user_prompt: str, timeout_s: float) -> Optional[dict]:
     from copilot import CopilotClient
 
-    client = CopilotClient()
+    token = _github_token()
+    client = CopilotClient(github_token=token) if token else CopilotClient()
     await client.start()
     try:
         session = await client.create_session(model=model, available_tools=[])
