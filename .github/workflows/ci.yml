@@ -35,7 +35,7 @@ jobs:
       - name: Unit tests
         run: pytest tests/unit -q
       - name: E2E + integration (headless Chrome, rule-based provider)
-        run: pytest tests/e2e tests/integrations -q -p no:randomly
+        run: pytest tests/e2e tests/integrations -q
         env:
           HEADLESS: "true"
 
@@ -97,7 +97,7 @@ jobs:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
           OLLAMA_MODEL: ${{ vars.OLLAMA_MODEL || 'gpt-oss:120b' }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-        run: pytest tests/e2e/test_ai_providers.py -q -p no:randomly --provider-live
+        run: pytest tests/e2e/test_ai_providers.py -q --provider-live
 
   build:
     runs-on: ubuntu-latest

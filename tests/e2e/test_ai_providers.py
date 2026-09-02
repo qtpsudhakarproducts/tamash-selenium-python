@@ -15,7 +15,6 @@ import os
 import pytest
 from selenium.webdriver.common.by import By
 
-from tests.conftest import FIXTURE_LOGIN
 
 pytestmark = [pytest.mark.e2e, pytest.mark.provider_live]
 
@@ -44,8 +43,8 @@ def _last_find_heal():
     return heals[-1] if heals else None
 
 
-def test_provider_heals_broken_id(ai_driver):
-    ai_driver.get(FIXTURE_LOGIN)
+def test_provider_heals_broken_id(ai_driver, fixture_login):
+    ai_driver.get(fixture_login)
     username_field = (By.ID, "username-was-renamed")
     ai_driver.find_element(*username_field).send_keys("tomsmith")
 
@@ -58,8 +57,8 @@ def test_provider_heals_broken_id(ai_driver):
     assert heal.suggested_selector in ('(By.ID, "username")', '(By.NAME, "username")'), heal.suggested_selector
 
 
-def test_provider_heals_broken_css_on_button(ai_driver):
-    ai_driver.get(FIXTURE_LOGIN)
+def test_provider_heals_broken_css_on_button(ai_driver, fixture_login):
+    ai_driver.get(fixture_login)
     ai_driver.find_element(By.ID, "username").send_keys("admin")
     login_button = (By.CSS_SELECTOR, "button#does-not-exist")
     ai_driver.find_element(*login_button).click()
@@ -69,12 +68,12 @@ def test_provider_heals_broken_css_on_button(ai_driver):
     assert heal is not None and heal.provider.split(":")[0] == _PROVIDER
 
 
-def test_provider_declines_gracefully_on_absent_element(ai_driver):
+def test_provider_declines_gracefully_on_absent_element(ai_driver, fixture_login):
     """A locator for something genuinely not on the page — the provider should decline and the
     original error re-raise (healing never invents an element)."""
     from selenium.common.exceptions import NoSuchElementException
 
-    ai_driver.get(FIXTURE_LOGIN)
+    ai_driver.get(fixture_login)
     nonexistent_widget = (By.ID, "a-calendar-datepicker-that-is-not-here")
     with pytest.raises(NoSuchElementException):
         ai_driver.find_element(*nonexistent_widget).click()

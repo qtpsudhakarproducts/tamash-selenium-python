@@ -40,6 +40,11 @@ FIXTURE_LOGIN = """data:text/html,
 
 
 @pytest.fixture()
+def fixture_login() -> str:
+    return FIXTURE_LOGIN
+
+
+@pytest.fixture()
 def raw_chrome():
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options

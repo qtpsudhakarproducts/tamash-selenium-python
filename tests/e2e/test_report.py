@@ -5,12 +5,11 @@ from __future__ import annotations
 import pytest
 from selenium.webdriver.common.by import By
 
-from tests.conftest import FIXTURE_LOGIN
 
 pytestmark = pytest.mark.e2e
 
 
-def test_report_records_actions_and_heals(raw_chrome, tmp_path, monkeypatch):
+def test_report_records_actions_and_heals(raw_chrome, tmp_path, monkeypatch, fixture_login):
     out = tmp_path / "report.html"
     monkeypatch.setenv("TAMASH_REPORT", str(out))
     monkeypatch.delenv("HEALER_PROVIDER", raising=False)
@@ -25,7 +24,7 @@ def test_report_records_actions_and_heals(raw_chrome, tmp_path, monkeypatch):
     report.enable_from_env()
 
     driver = SelfHealingDriver.wrap(raw_chrome)
-    driver.get(FIXTURE_LOGIN)
+    driver.get(fixture_login)
     username_field = (By.ID, "user_name_WRONG")
     driver.find_element(*username_field).send_keys("tomsmith")
     driver.find_element(By.ID, "submit").click()

@@ -4,14 +4,20 @@ import pytest
 from selenium.webdriver.common.by import By
 
 from tamash_selenium.integrations.unittest import TamashSeleniumTestCase
-from tests.conftest import FIXTURE_LOGIN
+
+_LOGIN = (
+    'data:text/html,<html><body><form>'
+    '<label for="username">Username</label><input id="username" name="username">'
+    '<label for="password">Password</label><input id="password" name="password" type="password">'
+    '<button id="submit" type="button">Log in</button></form></body></html>'
+)
 
 pytestmark = pytest.mark.e2e
 
 
 class TamashUnittestSmoke(TamashSeleniumTestCase):
     def test_heals_broken_locator(self):
-        self.driver.get(FIXTURE_LOGIN)
+        self.driver.get(_LOGIN)
         username_field = (By.ID, "user_name_WRONG")
         self.driver.find_element(*username_field).send_keys("admin")
         self.assertEqual(self.driver.find_element(By.ID, "username").get_attribute("value"), "admin")
