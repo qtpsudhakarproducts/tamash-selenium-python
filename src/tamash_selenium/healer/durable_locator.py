@@ -139,7 +139,7 @@ def infer_role_from_action(action: Optional[str]) -> Optional[str]:
 
 
 _GENERIC_ROLE_SUFFIX_RE = re.compile(
-    r"\s+(text ?box|input|field|drop ?down|select|combo ?box|button|link|check ?box|radio( ?button)?|label|icon|list ?box|menu)$",
+    r"\s+(text ?box|input|field|drop ?down|select|combo ?box|button|link|check ?box|radio( ?button)?|label|heading|icon|list ?box|menu)$",
     re.IGNORECASE,
 )
 

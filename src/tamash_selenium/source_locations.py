@@ -279,19 +279,37 @@ def _looks_like_locator_name(ident: str) -> bool:
     return decoded is not None and decoded.type_hint is not None
 
 
+def _is_weak_name(name: Optional[str]) -> bool:
+    """A generic assignment target that carries no element signal — ``el = driver.find_element(...)``,
+    ``select = Select(...)`` — so the healer should keep looking (an arg identifier on the same line
+    is usually the real locator name)."""
+    if not name:
+        return True
+    low = name.lower()
+    if low in _NON_LOCATOR_IDENTS or low in _MEANINGLESS_WORDS:
+        return True
+    return decode_variable_name(name) is None and not _looks_like_locator_name(name)
+
+
 def resolve_locator_name(chain: List[Caller]) -> Optional[Tuple[str, Optional[str]]]:
-    """Walk the consumer chain and return ``(raw_name, location)`` from the first frame that
-    yields a usable locator identifier."""
+    """Walk the consumer chain and return ``(raw_name, location)``. A strong name (decodes to a
+    phrase, or a ``*Locator``/``*By`` suffix, or a locator identifier passed as an argument) wins
+    over a weak assignment target (``el``, ``select``, ``result``) anywhere in the chain."""
+    fallback: Optional[Tuple[str, str]] = None
     for caller in chain:
-        name = (
-            extract_variable_name(caller.location)
-            or extract_locator_reference(caller.location)
+        var_name = extract_variable_name(caller.location)
+        strong = (
+            extract_locator_reference(caller.location)
             or extract_arg_identifier(caller.location)
             or extract_locatorish_token(caller.location)
         )
-        if name:
-            return name, caller.location
-    return None
+        if var_name and not _is_weak_name(var_name):
+            return var_name, caller.location
+        if strong:
+            return strong, caller.location
+        if var_name and fallback is None:
+            fallback = (var_name, caller.location)
+    return fallback
 
 
 # --------------------------------------------------------------------------------------------------
@@ -346,6 +364,7 @@ _TYPE_SUFFIXES: Tuple[Tuple[str, str], ...] = (
     ("textbox", "textbox"), ("textfield", "textbox"), ("dropdown", "dropdown"), ("combobox", "dropdown"),
     ("button", "button"), ("select", "dropdown"), ("input", "textbox"), ("field", "textbox"),
     ("radio", "radio button"), ("link", "link"), ("image", "image"), ("label", "label"),
+    ("heading", "heading"), ("header", "heading"),
     ("btn", "button"), ("chk", "checkbox"), ("cb", "checkbox"), ("rdo", "radio button"),
     ("ddl", "dropdown"), ("lnk", "link"), ("img", "image"), ("lbl", "label"),
 )
