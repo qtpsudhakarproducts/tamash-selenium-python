@@ -4,6 +4,20 @@ import os
 
 import pytest
 
+
+def pytest_addoption(parser):
+    parser.addoption("--provider-live", action="store_true", default=False,
+                     help="Run tests that make real calls to the configured HEALER_PROVIDER.")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--provider-live"):
+        return
+    skip = pytest.mark.skip(reason="needs --provider-live and a configured HEALER_PROVIDER")
+    for item in items:
+        if "provider_live" in item.keywords:
+            item.add_marker(skip)
+
 FIXTURE_LOGIN = """data:text/html,
 <html><body>
   <h1>Sign in</h1>
