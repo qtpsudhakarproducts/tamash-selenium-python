@@ -18,7 +18,7 @@ from .healer import SelfHealingReport, get_healing_reports, heal_action_failure
 from .self_healing_driver import SelfHealingDriver, get_durable, wrap
 from .tamash import clear_hint, current_hint, hint, set_hint
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     "SelfHealingDriver",

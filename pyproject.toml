@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tamash-selenium"
-version = "0.1.0"
+version = "0.1.1"
 description = "Plug-and-play self-healing for Selenium + Python: when find_element can't find its element, a rule-based matcher (default, no key) or an AI model (Ollama, OpenAI, Anthropic, Gemini, Claude/Copilot subscription) locates it on the live page and the call is retried. Works with plain scripts, pytest, pytest-bdd, Behave, and unittest."
 readme = "README.md"
 requires-python = ">=3.9"

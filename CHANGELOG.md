@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.1
+
+- `copilot-subscription`: pass `COPILOT_GITHUB_TOKEN` / `GITHUB_TOKEN` to the SDK explicitly and
+  strip it (a trailing newline in a CI secret otherwise produces an invalid `Authorization`
+  header). Falls back to the `copilot` CLI's own login when no token is set.
+- Recognise `heading` / `header` as an element-type suffix (`login_heading` → "Login (heading)").
+- Source resolution prefers a locator identifier over a generic assignment target
+  (`el = driver.find_element(*self.employee_id_locator)` is now "Employee Id", not "el").
+- Tests: browser matrix (chrome / firefox / edge), `pytest-selenium` interop, skill-CLI unit
+  tests, a real per-provider heal (incl. `ollama-local` on a self-hosted server in CI).
+
 ## 0.1.0
 
 First real release on PyPI — replaces the `0.0.1` placeholder that raised `ImportError`.
