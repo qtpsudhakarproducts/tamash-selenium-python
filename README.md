@@ -1,6 +1,8 @@
 # tamash-selenium (Python)
 
+[![PyPI](https://img.shields.io/pypi/v/tamash-selenium.svg)](https://pypi.org/project/tamash-selenium/)
 [![CI](https://github.com/qtpsudhakarproducts/tamash-selenium-python/actions/workflows/ci.yml/badge.svg)](https://github.com/qtpsudhakarproducts/tamash-selenium-python/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/pypi/pyversions/tamash-selenium.svg)](https://pypi.org/project/tamash-selenium/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 Plug-and-play self-healing for **Selenium + Python**. Wrap your `WebDriver` once and every
@@ -32,18 +34,20 @@ failure.
 
 ## Step 1: Install
 
-Not on PyPI yet — install from GitHub, pinned to a release tag:
-
 ```sh
-pip install "tamash-selenium @ git+https://github.com/qtpsudhakarproducts/tamash-selenium-python@v0.1.0"
+pip install tamash-selenium
 ```
 
 Pulls in Selenium 4 (which provisions the browser drivers itself since 4.6). Requires **Python 3.9+**.
 
-Optional AI-provider extras (append to the URL above, e.g. `...@v0.1.0#egg=tamash-selenium[anthropic]`,
-or `pip install anthropic` separately): `anthropic` / `claude-subscription` need the `anthropic`
-package; `copilot-subscription` needs `github-copilot-sdk` (Python 3.11+). The `openai` / `gemini`
-/ `ollama` providers need nothing extra.
+Optional AI-provider extras:
+
+```sh
+pip install 'tamash-selenium[anthropic]'              # HEALER_PROVIDER=anthropic | claude-subscription
+pip install 'tamash-selenium[copilot-subscription]'   # Python 3.11+ ; also needs the `copilot` CLI
+```
+
+The `openai` / `gemini` / `ollama` / `ollama-local` providers need nothing extra.
 
 **Worked examples** — every test style and every healing scenario, with locators broken on
 purpose — live in
@@ -220,6 +224,20 @@ and `.agents/skills/tamash-selenium/` that drives the local run → review → `
 | `OLLAMA_LOCAL_MODEL` / `OLLAMA_LOCAL_BASE_URL` / `OLLAMA_LOCAL_API_KEY` | — / `http://localhost:11434` / — | Self-hosted Ollama. |
 | `CLAUDE_CODE_OAUTH_TOKEN` / `CLAUDE_SUBSCRIPTION_MODEL` | — / `claude-haiku-4-5` | `claude-subscription`. |
 | `COPILOT_SUBSCRIPTION_MODEL` | `mai-code-1-flash-picker` | `copilot-subscription`. |
+
+## What's tested
+
+Every push runs in [CI](https://github.com/qtpsudhakarproducts/tamash-selenium-python/actions):
+
+- **Python** 3.9 / 3.11 / 3.13 on Linux, plus 3.11 on Windows
+- **Browsers** — a broken locator heals on Chrome, Firefox and Edge
+- **Providers** — a real end-to-end heal per provider (informational jobs, gated on the key being
+  configured): `openai`, `anthropic`, `gemini`, `ollama`, **`ollama-local`** (CI starts a real
+  `ollama serve`), `claude-subscription`, `copilot-subscription`
+- **CLI** — `doctor`, `apply-heals` (AST rewrite of inline calls *and* tuple constants), `init-skill`
+- **Integrations** — pytest plugin, pytest-bdd, Behave, `unittest`, `pytest-selenium` interop, plain `wrap()`
+- **[`tamash-selenium-python-sample`](https://github.com/qtpsudhakarproducts/tamash-selenium-python-sample)**
+  runs all of the above as broken-locator scenarios against bundled fixtures *and* a live OrangeHRM app
 
 ## License
 

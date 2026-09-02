@@ -2,7 +2,8 @@
 
 ## 0.1.0
 
-First real release — replaces the placeholder that raised `ImportError`.
+First real release on PyPI — replaces the `0.0.1` placeholder that raised `ImportError`.
+`pip install tamash-selenium`.
 
 Full feature parity with the Java `tamash-selenium`, ported to Python + Selenium:
 
