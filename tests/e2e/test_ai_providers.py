@@ -48,13 +48,16 @@ def test_provider_heals_broken_id(ai_driver, fixture_login):
     username_field = (By.ID, "username-was-renamed")
     ai_driver.find_element(*username_field).send_keys("tomsmith")
 
-    # Recovered the *real* field — the typed value landed in #username, not "some element".
+    # The real proof: the typed value landed in #username — the broken locator recovered to the
+    # actual field, not to "some element".
     assert ai_driver.find_element(By.ID, "username").get_attribute("value") == "tomsmith"
 
     heal = _last_find_heal()
     assert heal is not None, "expected an AI heal"
     assert heal.provider.split(":")[0] == _PROVIDER, f"healed via {heal.provider}, expected {_PROVIDER}"
-    assert heal.suggested_selector in ('(By.ID, "username")', '(By.NAME, "username")'), heal.suggested_selector
+    # A durable replacement, not the broken original. Shape (id / name / structural xpath) is
+    # model-dependent, so we only require it's not the selector that just failed.
+    assert heal.suggested_selector and "username-was-renamed" not in heal.suggested_selector
 
 
 def test_provider_heals_broken_css_on_button(ai_driver, fixture_login):
