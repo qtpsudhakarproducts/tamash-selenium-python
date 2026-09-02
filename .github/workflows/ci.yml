@@ -166,7 +166,7 @@ jobs:
         env:
           HEADLESS: "true"
           HEALER_PROVIDER: copilot-subscription
-          GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: pytest tests/e2e/test_ai_providers.py::test_provider_heals_broken_id -q --provider-live
 
   build:

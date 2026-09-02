@@ -35,7 +35,9 @@ def _warn(reason: str, not_installed: bool) -> None:
 
 def _github_token() -> Optional[str]:
     # A PAT with Copilot access (CI). Falls back to the `copilot` CLI's own login when unset.
-    return env.get("COPILOT_GITHUB_TOKEN") or env.get("GITHUB_TOKEN") or None
+    # Stripped — a stray newline in a CI secret otherwise becomes an invalid Authorization header.
+    raw = env.get("COPILOT_GITHUB_TOKEN") or env.get("GITHUB_TOKEN")
+    return raw.strip() if raw and raw.strip() else None
 
 
 async def _send_async(model: str, system_prompt: str, user_prompt: str, timeout_s: float) -> Optional[dict]:
