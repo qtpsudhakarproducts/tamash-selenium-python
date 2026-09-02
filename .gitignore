@@ -3,3 +3,8 @@ build/
 *.egg-info/
 node_modules/
 __pycache__/
+.venv/
+.pytest_cache/
+.tamash-selenium/
+.env
+*.pyc

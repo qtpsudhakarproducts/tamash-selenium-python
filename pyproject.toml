@@ -4,25 +4,60 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tamash-selenium"
-version = "0.0.1"
-description = "Placeholder — tamash-selenium is a Java / Maven package, not a Python one."
+version = "0.1.0"
+description = "Plug-and-play self-healing for Selenium + Python: when find_element can't find its element, a rule-based matcher (default, no key) or an AI model (Ollama, OpenAI, Anthropic, Gemini, Claude/Copilot subscription) locates it on the live page and the call is retried. Works with plain scripts, pytest, pytest-bdd, Behave, and unittest."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Sudhakar Kakunuri", email = "sudhakar@qtpsudhakar.com" }]
-keywords = ["selenium", "self-healing", "test-automation", "placeholder"]
+keywords = [
+  "selenium", "self-healing", "test-automation", "webdriver", "pytest", "behave",
+  "pytest-bdd", "llm", "ollama", "openai", "anthropic", "gemini",
+]
 classifiers = [
-  "Development Status :: 7 - Inactive",
+  "Development Status :: 4 - Beta",
+  "Framework :: Pytest",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Testing :: Acceptance",
+]
+dependencies = [
+  "selenium>=4.11.0",
+  "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+# HEALER_PROVIDER=anthropic (API key) and HEALER_PROVIDER=claude-subscription (a
+# `claude setup-token` OAuth token + the oauth beta header) both use the official `anthropic` SDK.
+# The raw-HTTP providers (openai/gemini/ollama) need nothing extra.
+anthropic = ["anthropic>=0.40.0"]
+claude-subscription = ["anthropic>=0.40.0"]
+# HEALER_PROVIDER=copilot-subscription — requires Python 3.11+ (the SDK's own floor).
+copilot-subscription = ["github-copilot-sdk>=1.0.11"]
+dev = [
+  "pytest>=7.0",
+  "pytest-bdd>=6.0",
+  "behave>=1.2.6",
 ]
 
 [project.urls]
 Homepage = "https://qtpsudhakarproducts.github.io/tamash-selenium/"
 Documentation = "https://qtpsudhakarproducts.github.io/tamash-selenium/guide.html"
-Source = "https://github.com/qtpsudhakarproducts/tamash-selenium"
-"Maven Central" = "https://central.sonatype.com/artifact/com.vibetestq.qtpsudhakar/tamash-selenium"
+Source = "https://github.com/qtpsudhakarproducts/tamash-selenium-python"
+"Java package" = "https://central.sonatype.com/artifact/com.vibetestq.qtpsudhakar/tamash-selenium"
+
+[project.entry-points.pytest11]
+tamash_selenium = "tamash_selenium.integrations.pytest_plugin"
+
+[project.scripts]
+tamash-selenium = "tamash_selenium.cli.__main__:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tamash_selenium"]
+artifacts = [
+  "src/tamash_selenium/healer/dom_snapshot.js",
+  "src/tamash_selenium/skills/**",
+]

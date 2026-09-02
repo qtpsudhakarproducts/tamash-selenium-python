@@ -1,23 +1,38 @@
-"""tamash-selenium is a Java / Maven package, not a Python one.
+"""tamash-selenium — plug-and-play self-healing for Selenium + Python.
 
-This PyPI name is a placeholder held by the maintainers of tamash-selenium so it can't be
-squatted. There is no Python distribution and none is planned — the self-healing engine for
-Selenium is a Java library.
+    from selenium import webdriver
+    from tamash_selenium import SelfHealingDriver
 
-  Maven Central : com.vibetestq.qtpsudhakar:tamash-selenium
-  Docs          : https://qtpsudhakarproducts.github.io/tamash-selenium/
-  Source        : https://github.com/qtpsudhakarproducts/tamash-selenium
+    driver = SelfHealingDriver.wrap(webdriver.Chrome())
+    driver.get("https://example.com/login")
+    driver.find_element(By.ID, "username").send_keys("admin")   # healed automatically if it breaks
 
-For Python + Playwright self-healing, see `tamash-playwright` on PyPI instead.
+See ``README.md`` for the framework integrations (pytest / pytest-bdd / Behave / unittest) and
+the ``HEALER_*`` environment variables.
 """
 
-__version__ = "0.0.1"
+from __future__ import annotations
 
-_MESSAGE = (
-    "tamash-selenium is a Java / Maven package, not a Python one.\n"
-    "  Maven Central: com.vibetestq.qtpsudhakar:tamash-selenium\n"
-    "  Docs: https://qtpsudhakarproducts.github.io/tamash-selenium/\n"
-    "If you want Python + Playwright self-healing, install `tamash-playwright` instead."
-)
+from .bindings import bind_driver, bind_element, unwrap
+from .healer import SelfHealingReport, get_healing_reports, heal_action_failure
+from .self_healing_driver import SelfHealingDriver, get_durable, wrap
+from .tamash import clear_hint, current_hint, hint, set_hint
 
-raise ImportError(_MESSAGE)
+__version__ = "0.1.0"
+
+__all__ = [
+    "SelfHealingDriver",
+    "wrap",
+    "get_durable",
+    "bind_driver",
+    "bind_element",
+    "unwrap",
+    "hint",
+    "set_hint",
+    "clear_hint",
+    "current_hint",
+    "heal_action_failure",
+    "get_healing_reports",
+    "SelfHealingReport",
+    "__version__",
+]
